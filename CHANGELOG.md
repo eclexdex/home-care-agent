@@ -9,7 +9,9 @@ This changelog is honest: entries describe what actually changed, not what a roa
 
 ## [Unreleased] - 2026-10-15
 ### Added
-- Banner and covenant illustration (locally generated Qwen-Image 2.1, MIT, hand-checked: no people/cameras/text) in `assets/`, wired into README.
+- README banner: screenshot of the real deployed care dashboard (anonymized; re-encoded, camera metadata stripped; vision-QA'd for PII before publishing).
+### Removed
+- Generated banner + covenant illustrations (tried, dropped in favor of the real product shot).
 ## [0.2.0] - 2026-10
 
 ### Added

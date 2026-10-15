@@ -1,6 +1,6 @@
 # Home Care Agent
 
-![A home at dusk, gently circled by points of light](assets/hca-banner.png)
+![The care dashboard: house status, mode buttons, SOS, room climate, and door watch](assets/dashboard.jpg)
 
 A **local-first Home Assistant care-safety package** for an elderly family
 member living independently — plus an optional AI-agent layer that turns the
@@ -112,9 +112,6 @@ placeholders (notify targets, entity ids) you substitute for your household.
 This is stewardship, not telemetry harvesting. The rules are not marketing —
 they're the design:
 
-![A hand guiding a thread of light toward a glowing home — protection without
-grasp](assets/hca-care-covenant.png)
-
 - **Every automation is a safety affordance.** Presence logic exists to light
   a night path and to prompt a "just checking in" nudge — never to log,
   export, or resell the resident's movements.
@@ -158,10 +155,10 @@ one thing we ask you not to strip from your fork's conscience.
 
 ## Art
 
-The banner and covenant illustration were generated locally (Qwen-Image 2.1 on
-our own hardware — no vendor image service, no accounts), then hand-checked for
-the same standard the code is held to: no people, no cameras, no text. They
-ship under the same MIT license as the code.
+The banner above is the real deployed dashboard (an anonymized example — mode
+buttons, SOS, room climate, door watch), re-encoded to strip camera metadata.
+Generated illustrations were tried and dropped in favor of showing the actual
+product.
 
 ## License
 
