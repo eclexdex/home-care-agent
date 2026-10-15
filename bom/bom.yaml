@@ -1,0 +1,228 @@
+# ============================================================
+# bom/bom.yaml — machine-readable companion to bom/BOM.md
+#
+# Costs are APPROXIMATE retail USD ranges. Verify current
+# pricing before purchase — these are shopping guides, not
+# quotes.
+#
+# Device classes are CLASS + PROTOCOL examples
+# (e.g. "SNZB-01P-class"), NOT SKU endorsements and not
+# requirements. Any product that matches the class is a
+# fine choice.
+#
+# The care net: local-first, Zigbee 3.0 under ZHA, no
+# vendor cloud, no camera AI, no health inference.
+# Covenant: care, not surveillance.
+# ============================================================
+
+meta:
+  description: >-
+    Hardware bill of materials for the Home Care Agent
+    elder-care net — three build tiers (minimal, standard,
+    comfort) of generic off-the-shelf parts.
+  currency: USD
+  cost_note: >-
+    Approximate retail ranges. Verify current pricing before
+    purchase.
+  protocol: >-
+    Zigbee 3.0 under ZHA preferred (channel 11/15/20/25,
+    away from 2.4 GHz WiFi channels 1/6/11). Mains-powered
+    Zigbee devices double as mesh routers. Battery devices
+    are sleepy end devices, which is fine for this net.
+    mmWave presence and air quality may be USB or Matter
+    where noted.
+  host_options:
+    - class: "Home Assistant Green class appliance"
+      power: "mains + ethernet; built-in battery"
+      notes: "all valid; ethernet preferred"
+    - class: "RK3528-class HAOS box"
+      power: "mains + ethernet"
+      notes: "modest hardware; all valid; ethernet preferred"
+    - class: "Generic mini-PC running HAOS"
+      power: "mains + ethernet"
+      notes: "all valid; ethernet preferred"
+  helpers:
+    - "input_boolean.home_away"
+    - "input_boolean.battery_low_sent"
+  helpers_note: >-
+    The automations expect these two HA helpers; they are
+    created in the HA UI and need no hardware.
+
+tiers:
+  minimal:
+    coverage: >-
+      health_panic.yaml end to end, plus freeze/heat-failure
+      alerts and the battery watch (env_alerts.yaml).
+    subtotal_usd_range: [145, 375]
+    items:
+      - role: "HA host"
+        automation: "infra"
+        class: "Home Assistant Green class, RK3528-class HAOS box, or generic mini-PC running HAOS — all valid; ethernet preferred"
+        power: "mains + ethernet"
+        protocol: "single point of failure for the whole net; no vendor cloud in any option"
+        cost_usd_range: [60, 200]
+        appropriateness: "out of sight (cupboard, not the resident's line of sight); nothing to wear or charge"
+      - role: "Zigbee 3.0 USB coordinator"
+        automation: "infra"
+        class: "Zigbee 3.0 USB dongle (e.g. SONOFF MG24-class, SkyConnect-class, CONBEE-class)"
+        power: "USB"
+        protocol: "the only mesh in the net; channel 11/15/20/25, away from 2.4 GHz WiFi channels 1/6/11; USB 2.0 port, short cable"
+        cost_usd_range: [20, 45]
+        appropriateness: "invisible infra"
+      - role: "Panic button"
+        automation: "health_panic.yaml"
+        class: "Zigbee 3.0 wireless button, big-surface/big-rocker single-press (e.g. SNZB-01P-class single-press, or big-button multi-press configured single-press)"
+        power: "coin cell (CR2032-class), 1+ year"
+        protocol: "sleepy end device; one press wakes it and transmits; mount chair-side, waist height, within arm's reach"
+        cost_usd_range: [15, 35]
+        appropriateness: "a big plain button that looks like a doorbell, not a medical alert pendant; nothing to charge; one press"
+      - role: "Indoor siren"
+        automation: "health_panic.yaml"
+        class: "Zigbee 3.0 indoor siren (alarm class)"
+        power: "AA batteries (or mains class if preferred)"
+        protocol: "battery class = end device, mains class = router; verify it is audible from where the care team sleeps"
+        cost_usd_range: [20, 40]
+        appropriateness: "reads as a home security alarm, which is what it is; placed where the family hears it, not where it startles the resident"
+      - role: "Temperature sensor"
+        automation: "env_alerts.yaml"
+        class: "Zigbee 3.0 temperature sensor (e.g. Aqara temperature/humidity class)"
+        power: "CR2032-class coin cell"
+        protocol: "end device; in the coldest room the resident sleeps or spends the most time — freeze and heat-failure logic is the winter safety net"
+        cost_usd_range: [15, 30]
+        appropriateness: "plain; wall-clip or tabletop; nobody has to interact with it"
+      - role: "Front door contact"
+        automation: "env_alerts.yaml"
+        class: "Zigbee 3.0 door/window contact (e.g. SNZB-01-class)"
+        power: "CR2032-class coin cell"
+        protocol: "end device; on the battery watch list; in Standard tier it also feeds door_watch.yaml when armed"
+        cost_usd_range: [15, 25]
+        appropriateness: "a small contact on the door frame — unobtrusive, and clearly not a camera"
+
+  standard:
+    coverage: "all five automations (inherits every minimal item)"
+    inherits: "minimal"
+    subtotal_usd_range: [340, 810]
+    items:
+      - role: "Home/Away button"
+        automation: "home_away.yaml"
+        class: "Zigbee 3.0 wireless button, multi-press (big-button class)"
+        power: "coin cell (CR2032-class)"
+        protocol: "end device; door-side, within arm's reach of the exit"
+        cost_usd_range: [15, 35]
+        appropriateness: "a plain door-side button; the resident arms and disarms with a physical button — consent and control stay with the person at home"
+      - role: "Night path lighting"
+        automation: "night_path.yaml"
+        class: "dimmable Zigbee bulb (1-3), hallway + kitchen"
+        power: "mains via socket"
+        protocol: "if the home already has dimmable lights on this path, this line is zero; the presence sensor drives them low and warm"
+        cost_usd_range: [10, 20]
+        appropriateness: "a warm, low light at 3 a.m. — the opposite of a startle"
+      - role: "mmWave presence sensor"
+        automation: "night_path.yaml"
+        class: "mmWave presence sensor (Zigbee, USB, or Matter class), hallway placement"
+        power: "mains (USB or PoE) — prefer mains: doubles as a mesh router"
+        protocol: "mmWave registers presence the way PIR cannot; day + night coverage for the path and the idle check-in nudge; aim at the path, not the bedroom"
+        cost_usd_range: [30, 60]
+        appropriateness: "invisible, no light on, nothing to wear; the check-in nudge is a 'call or knock' prompt — a care affordance, not a movement log"
+      - role: "Remaining door/window contacts"
+        automation: "door_watch.yaml + env_alerts.yaml"
+        class: "Zigbee 3.0 door/window contact class, 2-3 more (back door + 1-2 windows)"
+        power: "coin cell (CR2032-class)"
+        protocol: "end devices; armed-Away logic fires only when the resident has armed — more doors, no more noise"
+        cost_usd_range: [30, 75]
+        appropriateness: "the same unobtrusive contacts as the front door"
+      - role: "Humidity or temp/humidity"
+        automation: "env_alerts.yaml"
+        class: "Zigbee 3.0 humidity or temp/humidity combo"
+        power: "coin cell (CR2032-class)"
+        protocol: "pairs with freeze logic; moisture is a comfort signal the digest can carry — not a health verdict"
+        cost_usd_range: [20, 35]
+        appropriateness: "nobody has to interact with it"
+      - role: "Water leak sensor (prepared gap)"
+        automation: "env_alerts.yaml"
+        class: "Zigbee 3.0 water leak sensor class (under-sink, water-heater)"
+        power: "coin cell or CR"
+        protocol: "a leak automation is not in the package yet (known gap) — a 10-line HA template fires the same family alert as everything else; wire it the same day you install it"
+        cost_usd_range: [15, 30]
+        appropriateness: "saves the floor and the heating bill; unobtrusive"
+      - role: "Battery backup / UPS"
+        automation: "infra"
+        class: "USB battery bank sized for the host + coordinator — or skip if the host class ships with a built-in battery (the HA Green class does)"
+        power: "mains"
+        protocol: "the net must outlive the power outage, not just the internet cut; test once a year"
+        cost_usd_range: [25, 60]
+        appropriateness: "quiet resilience; the resident never has to think about it"
+      - role: "Exterior camera (OPTIONAL)"
+        automation: "infra"
+        class: "PoE IP camera, local recording only (NVR/FFmpeg class), no cloud AI, exterior only"
+        power: "PoE (+ PoE injector, 15-30 USD)"
+        protocol: "the reference cart marks this optional; the street, not the home — local storage only, no vendor cloud, no AI"
+        cost_usd_range: [50, 120]
+        optional: true
+        appropriateness: "a doorbell-class view of the street; if the family is uneasy with any camera, the net works without it"
+
+  comfort:
+    coverage: "resilience + comfort on top of Standard (inherits every minimal and standard item)"
+    inherits: "standard"
+    subtotal_usd_range: [535, 1310]
+    items:
+      - role: "Redundant power"
+        automation: "infra"
+        class: "second power path: battery backup for the router/switch, a PoE injector as spare, or host class with built-in battery plus a UPS"
+        power: "mains"
+        protocol: "one failure mode left — the grid — and this tier removes most of it"
+        cost_usd_range: [50, 120]
+        appropriateness: "invisibility, squared"
+      - role: "Second mmWave presence sensor"
+        automation: "night_path.yaml"
+        class: "mmWave presence sensor class, second zone (kitchen, if the first covers the hallway — or vice versa)"
+        power: "mains (USB or PoE)"
+        protocol: "two zones = the check-in nudge stops firing when the resident is simply in the other room — comfort, not more coverage of the person"
+        cost_usd_range: [30, 60]
+        appropriateness: "the nudge gets quieter and more accurate; nothing new to wear"
+      - role: "Air quality sensor"
+        automation: "env_alerts.yaml"
+        class: "Zigbee 3.0 air quality sensor (CO2 / VOC / PM2.5 class)"
+        power: "USB or coin cell"
+        protocol: "the digest reports values; the covenant says no health inference — a stale room is a ventilation note, not a diagnosis"
+        cost_usd_range: [40, 80]
+        appropriateness: "a small tabletop sensor; nobody has to interact with it"
+      - role: "Wall tablet"
+        automation: "infra"
+        class: "used 10-11 inch Android tablet running the HA dashboard, mounted by the door"
+        power: "USB"
+        protocol: "a window on the home for the family and on the family for the resident: state, not a movement timeline"
+        cost_usd_range: [30, 150]
+        appropriateness: "a home tablet, not a 'senior gadget' — the care recipient uses it for the things a home tablet is for, including photos and video calls"
+      - role: "Spares"
+        automation: "infra"
+        class: "spare panic button, spare door contact, spare temp/humidity — one each"
+        power: "coin cell (CR2032-class)"
+        protocol: "a dead coin cell at 2 a.m. is a bad night; the spares drawer is part of the net"
+        cost_usd_range: [45, 90]
+        appropriateness: "reliability without drama; nobody notices the spares drawer"
+
+anti_bom:
+  - item: "indoor cameras"
+    reason: "presence does the care job; watching the person at home is surveillance, and the covenant forbids it"
+  - item: "microphones (always-on, wake-word)"
+    reason: "audio is the most intimate data there is; a care net that listens has stopped being a care net"
+  - item: "wearables, pendants, anything to charge"
+    reason: "nothing the care recipient wears, charges, or can lose; a dead pendant is a false sense of safety, and a body-worn tracker is a collar, not a safety net"
+  - item: "smart speakers"
+    reason: "always-listening hardware plus a cloud voice assistant; nothing in the five automations needs one"
+  - item: "cloud bridges, vendor hubs"
+    reason: "the net runs Zigbee under ZHA, locally; anything that phones home is out by definition"
+  - item: "mmWave in bedrooms / bathrooms"
+    reason: "the most private rooms are excluded; presence lives on the path — hallway, kitchen — where falls actually happen"
+
+smoke_co:
+  in_scope: false
+  placeholder: "env_alerts.yaml carries a commented smoke detector placeholder pending hardware"
+  note: >-
+    Smoke and CO are intentionally out of scope for this BOM,
+    but real, code-compliant detectors are non-negotiable
+    life safety: install per local fire code, test monthly,
+    change batteries on schedule. The care net does not
+    replace them and should never let anyone feel that it
+    does.

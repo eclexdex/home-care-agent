@@ -23,6 +23,19 @@ discipline, and the covenant that governs them. It is generic by design —
 every name, chat id, and credential is a placeholder you fill in for your own
 household.
 
+## What's in the repo
+
+| Path | What it is |
+|---|---|
+| [`automations/`](automations/) | The five paste-ready YAML automations (below) |
+| [`bom/`](bom/BOM.md) | Hardware bill of materials in three tiers (Minimal / Standard / Comfort) + the anti-BOM — what we deliberately leave out (costs approximate; verify current pricing; [`bom.yaml`](bom/bom.yaml) is the machine-readable companion) |
+| [`skills/home-care-agent/`](skills/home-care-agent/SKILL.md) | Drop-in Hermes skill family: proven operating procedures + HA API cheat sheet for an agent seat |
+| [`docs/PRIVACY-ONE-PAGER.md`](docs/PRIVACY-ONE-PAGER.md) | The covenant as a printable one-page letter to the cared-for person |
+| [`docs/CARE-NET-MODEL.md`](docs/CARE-NET-MODEL.md) | The event → meaning → response model, arming states, and the "silence is not data" rule |
+| [`EXAMPLES/`](EXAMPLES/digest-sample.md) | Fictional samples of the digest and urgent-alert voice |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`SECURITY.md`](SECURITY.md) · [`CHANGELOG.md`](CHANGELOG.md) | How to add automations safely (Privacy Impact Note + the T-test), the one-page threat model, and what actually changed, release by release |
+| [`.github/`](.github/ISSUE_TEMPLATE/bug_report.md) | Issue and PR templates |
+
 ## Architecture
 
 ```
@@ -89,6 +102,8 @@ placeholders (notify targets, entity ids) you substitute for your household.
 4. **Optional: the agent.** Point a local-first AI agent at the HA API with a
    read-only token using [`agent/SOUL.template.md`](agent/SOUL.template.md)
    as its persona and [`agent/README.md`](agent/README.md) as the wiring doc.
+   If your agent runs on Hermes, drop [`skills/home-care-agent/`](skills/home-care-agent/SKILL.md)
+   into its skills directory for the operating procedures and API cheat sheet.
 
 ## The covenant: care, not surveillance
 
