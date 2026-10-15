@@ -7,10 +7,9 @@ and this project intends to follow [Semantic Versioning](https://semver.org/).
 
 This changelog is honest: entries describe what actually changed, not what a roadmap wishes.
 
-## [Unreleased]
-
-Nothing staged. When something is staged, it will appear here before it ships.
-
+## [Unreleased] - 2026-10-15
+### Added
+- Banner and covenant illustration (locally generated Qwen-Image 2.1, MIT, hand-checked: no people/cameras/text) in `assets/`, wired into README.
 ## [0.2.0] - 2026-10
 
 ### Added
