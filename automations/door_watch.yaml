@@ -1,0 +1,46 @@
+# Home Care Agent — Door watch (armed-away logic)
+#
+# When Home/Away = Away (set by the resident's own door button, see
+# home_away.yaml), an open front/back door triggers siren + alert.
+# When Home, doors are ignored — deaf by design.
+#
+# Optional camera snapshot: if you run a LOCAL camera integrated in HA
+# (no cloud AI), uncomment the snapshot block. Never wire a cloud
+# analytics service into a care build.
+#
+# CHANGE THESE BEFORE FIRST USE:
+#   - notify.care_team_telegram → your notify service
+#   - sensor.front_door, sensor.back_door → real ids after pairing
+#   - input_boolean.home_away → the helper from home_away.yaml
+#   - siren.care_siren, light.living_room_lights → real ids
+#
+- id: door_watch_away
+  alias: Care Recipient - Door Watch (away)
+  trigger:
+    - platform: state
+      entity_id: sensor.front_door
+      to: 'on'
+    - platform: state
+      entity_id: sensor.back_door
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_boolean.home_away
+      state: 'on'
+  action:
+    - service: notify.care_team_telegram
+      data:
+        message: "🚨 DOOR OPEN while armed away at {{ now().strftime('%H:%M') }}. Siren + lights on."
+    - service: siren.turn_on
+      target:
+        entity_id: siren.care_siren
+    - service: light.turn_on
+      target:
+        entity_id: light.living_room_lights
+    # Optional local-camera snapshot (no cloud AI, local RTSP/ONVIF only):
+    # - service: camera.snapshot
+    #   target:
+    #     entity_id: camera.front_local
+    #   data:
+    #     filename: /media/care_snapshots/door_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg
+  mode: single

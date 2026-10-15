@@ -1,0 +1,84 @@
+# Home Care Agent — Environment + Battery alerts
+#
+# Freeze / heat-failure: a heat failure in winter is a genuine health risk
+# (pipes and people). Thresholds are °F — adjust for your climate.
+# Smoke/CO placeholder — NO smoke sensor ships with this package; add a
+#   ZHA-compatible Zigbee smoke detector and point sensor.smoke_living_room
+#   at it, then uncomment the block.
+# Battery low on any battery device → quiet alert (once, not every tick).
+#
+# CHANGE THESE BEFORE FIRST USE:
+#   - notify.care_team_telegram → your notify service
+#   - sensor.living_room_temp → real id after pairing
+#   - sensor.smoke_living_room → real id once a smoke detector is paired
+#   - input_boolean.battery_low_sent → create this helper in HA first
+#   - the battery sensor id list → your real battery sensors
+#
+- id: freeze_alert
+  alias: Care Recipient - Freeze Alert (living room)
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.living_room_temp
+      below: 40
+  condition: []
+  action:
+    - service: notify.care_team_telegram
+      data:
+        message: "🥶 FREEZE: {{ states('sensor.living_room_temp') }}°F at {{ now().strftime('%H:%M') }}. Check heat / pipes."
+  mode: single
+
+- id: heat_failure_alert
+  alias: Care Recipient - Heat Failure Alert (living room)
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.living_room_temp
+      above: 85
+  condition: []
+  action:
+    - service: notify.care_team_telegram
+      data:
+        message: "🔥 HOT: {{ states('sensor.living_room_temp') }}°F at {{ now().strftime('%H:%M') }}. Check ventilation / AC."
+  mode: single
+
+# - id: smoke_living_room
+#   alias: Care Recipient - Smoke (living room)
+#   trigger:
+#     - platform: state
+#       entity_id: sensor.smoke_living_room
+#       to: 'on'
+#   condition: []
+#   action:
+#     - service: notify.care_team_telegram
+#       data:
+#         message: "🚨 SMOKE detected at {{ now().strftime('%H:%M') }}. Siren + lights on."
+#     - service: siren.turn_on
+#       target:
+#         entity_id: siren.care_siren
+#     - service: light.turn_on
+#       target:
+#         entity_id: light.living_room_lights
+#   mode: single
+
+- id: battery_low
+  alias: Care Recipient - Low Battery
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.button_panic_usual_chair_battery
+        - sensor.button_homeaway_door_battery
+        - sensor.front_door_battery
+        - sensor.back_door_battery
+        - sensor.living_room_presence_battery
+        - sensor.living_room_temp_battery
+      to: 'unavailable'
+  condition:
+    - condition: template
+      value_template: "{{ not is_state('input_boolean.battery_low_sent', 'on') }}"
+  action:
+    - service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.battery_low_sent
+    - service: notify.care_team_telegram
+      data:
+        message: "🔋 Low battery on a care sensor — check the panic button first."
+  mode: single

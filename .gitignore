@@ -1,0 +1,12 @@
+# Local environment / secrets — NEVER commit real values.
+# Real credentials live in a credential file outside this repo (chmod 600),
+# never in this tree, never in chat.
+.env
+*.env
+!.env.example
+*.pem
+*.key
+secrets/
+credentials/
+ha_config/
+.DS_Store

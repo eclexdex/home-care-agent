@@ -1,0 +1,47 @@
+# Home Care Agent — Home/Away (front-door button)
+#
+# Trigger: press button_homeaway_door (wireless Zigbee push).
+# Effect: cycle an armed Home/Away state (input_boolean.home_away).
+#   - Away → arms the door-watch logic (see door_watch.yaml)
+#   - Home → disarms it
+# The resident controls what is armed, simply and locally.
+#
+# CHANGE THESE BEFORE FIRST USE:
+#   - notify.care_team_mobile → your notify service
+#   - input_boolean.home_away → create this helper in HA first
+#     (Settings -> Devices & Services -> Helpers -> Input boolean)
+#
+# Optional escalation block (siren + lights) is included commented-out:
+# many households prefer arming to be silent. Enable if you want audible
+# arming feedback.
+#
+- id: home_away_cycle
+  alias: Care Recipient - Home/Away (front door button)
+  trigger:
+    - platform: state
+      entity_id: sensor.button_homeaway_door
+      to: 'on'
+  condition: []
+  action:
+    - variables:
+        state: >-
+          {% set s = states('input_boolean.home_away') %}
+          {{ 'away' if s in ('unavailable','unknown','off') else 'home' }}
+    - service: input_boolean.turn_{{ 'on' if state == 'away' else 'off' }}
+      target:
+        entity_id: input_boolean.home_away
+    - service: notify.care_team_mobile
+      data:
+        title: "Home/Away"
+        message: "CARE_RECIPIENT set Home to {{ state }} at {{ now().strftime('%H:%M') }}"
+    # - if:
+    #     - condition: state
+    #       entity_id: input_boolean.home_away
+    #       state: 'on'
+    #   then:
+    #     - service: siren.turn_on
+    #       target:
+    #         entity_id: siren.care_siren
+    #       data:
+    #         duration: 1   # short beep as arming feedback, not an alarm
+  mode: single

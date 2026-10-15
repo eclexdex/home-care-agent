@@ -1,0 +1,36 @@
+# Home Care Agent — Health Panic (usual-chair button)
+#
+# Trigger: press button_panic_usual_chair (wireless Zigbee push).
+# Effect: siren + lights on, immediate alert to the care team,
+#         dashboard flag (optional, see note below).
+#
+# CHANGE THESE BEFORE FIRST USE:
+#   - notify.care_team_mobile / notify.care_team_telegram → your notify services
+#   - light.living_room_lights, siren.care_siren → real entity ids after pairing
+#   - CARE_RECIPIENT in the alert text → a role label your family prefers
+#
+# Note: this is the repo's reason for existing. Test it end-to-end with
+# the resident before relying on it.
+#
+- id: panic_usual_chair
+  alias: Care Recipient - Health Panic (usual chair)
+  trigger:
+    - platform: state
+      entity_id: sensor.button_panic_usual_chair
+      to: 'on'
+  condition: []
+  action:
+    - service: notify.care_team_mobile
+      data:
+        title: "🚨 PANIC — CARE_RECIPIENT"
+        message: "Panic button pressed in the living room. Siren + lights on."
+    - service: notify.care_team_telegram
+      data:
+        message: "🚨 PANIC — CARE_RECIPIENT pressed the panic button at {{ now().strftime('%H:%M') }}. Siren + lights on."
+    - service: light.turn_on
+      target:
+        entity_id: light.living_room_lights
+    - service: siren.turn_on
+      target:
+        entity_id: siren.care_siren
+  mode: single
