@@ -1,5 +1,7 @@
 # Home Care Agent
 
+[![Latest release](https://img.shields.io/github/v/release/eclexdex/home-care-agent?color=2f6f4f)](https://github.com/eclexdex/home-care-agent/releases) [![License: MIT](https://img.shields.io/badge/license-MIT-2f6f4f.svg)](LICENSE) [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-HAOS%20%C2%B7%20ZHA-41BDF5)](docs/how-to-install.md)
+
 ![The care dashboard: house status, mode buttons, SOS, room climate, and door watch](assets/dashboard.jpg)
 
 A **local-first Home Assistant care-safety package** for an elderly family
@@ -10,6 +12,29 @@ Five paste-ready YAML automations (health-panic button, Home/Away arming,
 freeze/heat-failure + battery alerts, presence-driven night lighting,
 armed-away door watch) and an install-day runbook, deliberately pre-built so
 install day is pair-and-paste, not design.
+
+## Who this is for
+
+This is for a family setting up **elder-care at home** — an elderly parent,
+grandparent, or spouse **living alone** — who wants **aging in place** to be
+safer without wiring the house for surveillance. If you are a **caregiver**
+who has been shopping for a **medical alert system** or **senior monitoring
+service** and balked at the monthly fee, the vendor app, and the camera in the
+bedroom, this repo is the self-hosted alternative: a **panic button** by the
+favourite chair, a **door watch** armed by the resident, **freeze and
+heat-failure alerts** in winter, a **night path** so a 3 a.m. trip to the
+kitchen doesn't end in a fall, and a daily **family digest** written by an
+optional local AI agent.
+
+If you searched for any of these, you are in the right place: *elderly parent
+living alone*, *senior safety Home Assistant*, *aging in place automation*,
+*caregiver alert system*, *elderly monitoring without cameras*, *local-first
+elder care*, *Home Assistant panic button*, *Zigbee door sensor caregiver
+alert*, *senior fall-risk night lighting*, *self-hosted medical alert
+alternative*.
+
+It is deliberately **not** a medical device, not a monitored service, and not
+a camera system — see [What this is not](#what-this-is-not).
 
 ## Why this exists
 
@@ -128,6 +153,20 @@ they're the design:
 
 If you adopt this project, adopt the covenant too. An elder-care system built
 without the resident's informed agreement is surveillance wearing a cardigan.
+
+## What this is not
+
+Stated plainly, because elder-care marketing blurs these lines:
+
+- **Not a medical device.** No FDA clearance, no diagnosis, no treatment claim.
+- **Not a monitored service.** Nobody is on the other end of a subscription —
+  the alert goes to *your* family's phones, and that is the point.
+- **Not a camera system.** No optics, no cloud video AI, no footage of the
+  resident anywhere. Presence is mmWave yes/no, consumed on the LAN.
+- **Not fall detection.** The night path and the idle check-in reduce fall
+  *risk*; they do not detect a fall. Don't build a plan that assumes they do.
+- **Not a substitute for emergency services.** The panic button's whole job is
+  to make sure a human finds out.
 
 ## FAQ
 

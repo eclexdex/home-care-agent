@@ -7,9 +7,18 @@ and this project intends to follow [Semantic Versioning](https://semver.org/).
 
 This changelog is honest: entries describe what actually changed, not what a roadmap wishes.
 
-## [Unreleased] - 2026-10-15
+## [0.3.0] - 2026-11-24
+
 ### Added
+- **Discoverability pass** so a caregiver can actually find this by searching: 18 repository topics (`home-assistant`, `elder-care`, `elderly-care`, `aging-in-place`, `caregiver`, `senior-safety`, `independent-living`, `panic-button`, `presence-detection`, `local-first`, `privacy-first`, `self-hosted`, `zigbee`, `zha`, `family-care`, `home-safety`, `ai-agent`, `home-automation`).
+- README **"Who this is for"** section — the household and the search phrases caregivers actually type (*elderly parent living alone*, *senior safety Home Assistant*, *elderly monitoring without cameras*, *self-hosted medical alert alternative*).
+- README **"What this is not"** section — medical device, monitored service, camera system, fall detection, emergency-services substitute — stated plainly instead of implied.
+- Release / license / Home Assistant badges; this is the first tagged release.
 - README banner: screenshot of the real deployed care dashboard (anonymized; re-encoded, camera metadata stripped; vision-QA'd for PII before publishing).
+
+### Changed
+- Repository description now names the household served (an elderly parent living alone) and the five automations, instead of only the architecture.
+
 ### Removed
 - Generated banner + covenant illustrations (tried, dropped in favor of the real product shot).
 ## [0.2.0] - 2026-10
