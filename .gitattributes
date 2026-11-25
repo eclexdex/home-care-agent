@@ -1,0 +1,5 @@
+# Every automation and dashboard file in this repo is YAML, so let GitHub
+# count it as the primary language (Linguist skips YAML and Markdown by
+# default, which left the repo with no language and no language-filter surface).
+*.yaml linguist-detectable=true
+*.yml  linguist-detectable=true
