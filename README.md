@@ -15,7 +15,7 @@ install day is pair-and-paste, not design.
 
 ## Who this is for
 
-This is for a family setting up **elder-care at home** — an elderly parent,
+This is for a family setting up **elder care at home** — an elderly parent,
 grandparent, or spouse **living alone** — who wants **aging in place** to be
 safer without wiring the house for surveillance. If you are a **caregiver**
 who has been shopping for a **medical alert system** or **senior monitoring
@@ -151,12 +151,12 @@ they're the design:
   Outbound location or health-flavored data to third parties is forbidden by
   the agent's hard rules, not merely discouraged.
 
-If you adopt this project, adopt the covenant too. An elder-care system built
+If you adopt this project, adopt the covenant too. An elder care system built
 without the resident's informed agreement is surveillance wearing a cardigan.
 
 ## What this is not
 
-Stated plainly, because elder-care marketing blurs these lines:
+Stated plainly, because elder care marketing blurs these lines:
 
 - **Not a medical device.** No FDA clearance, no diagnosis, no treatment claim.
 - **Not a monitored service.** Nobody is on the other end of a subscription —
